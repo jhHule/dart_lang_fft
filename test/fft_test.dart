@@ -60,13 +60,13 @@ void main() {
     var l1 = [0,2,4,6];
     var l2 = [1,3,5,7];
 
-    expect(combineLists(l1, l2, (i1, i2)=>i1+i2), equals([1, 5, 9, 13]));
-    expect(combineLists(l1, l2, (i1, i2)=>i1-i2), equals([-1, -1, -1, -1]));
+    expect(combineLists(l1, l2, (num i1, num i2)=>i1+i2), equals([1, 5, 9, 13]));
+    expect(combineLists(l1, l2, (num i1, num i2)=>i1-i2), equals([-1, -1, -1, -1]));
   });
 
   test("indexed map works", () {
     var l1 = new List.filled(10, 1);
-    var l2 = indexedMap(l1, (i, x)=>i*x);
+    var l2 = indexedMap(l1, (num i, num x)=>i*x);
     expect(l2, equals(new Iterable.generate(10, (i)=>i)));
   });
 
@@ -100,9 +100,9 @@ void main() {
 
   test("fft does something that makes sense", () {
     int l2len = 12;
-    int len = math.pow(2, l2len);
+    num len = math.pow(2, l2len);
     var frequencies = [2, 5, 15, 35];
-    var input = new List<num>.filled(len, 0);
+    var input = new List<num>.filled(len.toInt(), 0);
 
     for (int i = 0; i < len; i++) {
       frequencies.forEach((int freq) {
@@ -111,7 +111,7 @@ void main() {
     }
     var window = new Window(WindowType.HAMMING);
     var fft = new FFT().Transform(window.apply(input));
-    var results = new List<num>();
+    List<num> results = [];
     frequencies.forEach((int i) => results.add(fft[i].modulus));
     var res = results.fold(true, (bool val, num n) => val && (n > 5.0));
     expect(res, equals(true));
@@ -122,7 +122,7 @@ void main() {
 
   test("fft has right sign for phase", () {
     int l2len = 8;
-    int len = math.pow(2, l2len);
+    int len = math.pow(2, l2len).toInt();
     var input = new Iterable.generate(len, (i) => _getValAt(i, len)).toList();
 
     List<Complex> fft =
@@ -141,7 +141,7 @@ void main() {
 
   test("fft works for large samples",  () {
     int l2len = 18;
-    int len = math.pow(2, l2len);
+    int len = math.pow(2, l2len).toInt();
     var input = (new Iterable.generate(len, (i) => _getValAt(i, len))).toList();
 
     List<num> windowed = new Window(WindowType.HAMMING).apply(input);

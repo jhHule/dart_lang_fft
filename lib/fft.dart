@@ -11,7 +11,7 @@ typedef T Combiner<T>(T t1, T t2);
 typedef T MapFunc<S, T>(int i, S s);
 
 class FFT {
-  _Twiddles _twiddles;
+  late _Twiddles _twiddles;
 
   List<Complex> Transform(List<num> x) {
     int len = x.length;
@@ -28,7 +28,7 @@ class FFT {
     List<Complex> evens = _transform(sl.evens, halfLength, step * 2);
     List<Complex> odds = _transform(sl.odds, halfLength, step * 2);
 
-    List<Complex> newodds = indexedMap(odds, (i, odd)=> odd * _twiddles.at(i, length));
+    List<Complex> newodds = indexedMap(odds, (int i, Complex odd)=> odd * _twiddles.at(i, length));
 
     var results = combineIterables<Complex>(
         evens.take(halfLength), newodds.take(halfLength), (i1, i2) => i1 + i2)
@@ -74,21 +74,24 @@ List<T> combineLists<T>(
 }
 
 class _Twiddles {
-  List<Complex> _cache;
+  late List<Complex?> _cache;
   int _cacheLength;
-  double _turn;
+  late double _turn;
 
   _Twiddles(this._cacheLength) {
-    this._cache = new List<Complex>(this._cacheLength);
+
+    this._cache = new List.filled(this._cacheLength, null);
     this._turn = 2 * math.pi / _cacheLength;
   }
 
   Complex at(int i, int length) {
     int n = i * _cacheLength ~/ length;
-    if (_cache[n] == null) {
-      _cache[n] = new Complex.polar(1.0, -n * _turn);
+    Complex? c = _cache[n];
+    if (c == null) {
+      c = new Complex.polar(1.0, -n * _turn);
+      _cache[n] = c;
     }
-    return _cache[n];
+    return c;
   }
 }
 
@@ -105,7 +108,7 @@ class SplitList<T> {
 
   static Tuple2<List<T>, List<T>> _createSplitList<T>(List<T> x) {
     if (x.isEmpty)
-      return new Tuple2<List<T>, List<T>>(new List<T>(), new List<T>());
+      return new Tuple2<List<T>, List<T>>(<T>[], <T>[]);
     List<T> evens = [];
     List<T> odds = [];
     for (int i=0; i<x.length; i+=2) {
