@@ -8,7 +8,8 @@ environment:
   sdk: '>=2.12.0 <3.0.0'
 
 dependencies:
-  my_complex: ">=0.1.0 <1.0.0"
+  my_complex:
+    git: git@github.com:janipiippow/dart_my_complex.git
   tuple: ^2.0.0
 
 dev_dependencies:
