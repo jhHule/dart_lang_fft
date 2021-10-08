@@ -9,7 +9,8 @@ environment:
 
 dependencies:
   my_complex:
-    git: git@github.com:janipiippow/dart_my_complex.git
+    git:
+      url: git://github.com/janipiippow/dart_my_complex.git
   tuple: ^2.0.0
 
 dev_dependencies:
